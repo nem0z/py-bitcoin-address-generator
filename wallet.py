@@ -32,4 +32,12 @@ class Wallet():
         public_key_hash = b'\x00' + h160
         cksum = checksum(public_key_hash)
         p2pkh_address_bytes = public_key_hash + cksum
-        return base58.b58encode(p2pkh_address_bytes)
+    
+    def P2SH(self) -> str:
+        h160 = hash160(bytes.fromhex(self.get_public_key()))
+        redeem_script = b'\x24' + h160
+        h160 = hash160(redeem_script)
+        script_hash = b'\x05' + h160
+        cksum = checksum(script_hash)
+        return base58.b58encode(script_hash + cksum)
+    
