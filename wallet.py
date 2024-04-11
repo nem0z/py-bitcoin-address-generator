@@ -41,3 +41,9 @@ class Wallet():
         cksum = checksum(script_hash)
         return base58.b58encode(script_hash + cksum)
     
+    def bench32(self) -> str:
+        h160 = hash160(bytes.fromhex(self.get_public_key()))
+        witness_programme = h160
+        witness_version = 0x00
+        hrp = 'bc'
+        return bech32.encode(hrp, witness_version, witness_programme)
