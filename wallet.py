@@ -25,4 +25,11 @@ class Wallet():
     def get_compressed_public_key(self) -> str:
         x,y = self.get_xy()
         prefix = '02' if y % 2 == 0 else '03'
-        return prefix + x.to_bytes(32, 'big').hex()
+    
+    def P2PKH(self, compressed = False) -> str:
+        public_key = self.get_compressed_public_key() if compressed else self.get_public_key()
+        h160 = hash160(bytes.fromhex(public_key))
+        public_key_hash = b'\x00' + h160
+        cksum = checksum(public_key_hash)
+        p2pkh_address_bytes = public_key_hash + cksum
+        return base58.b58encode(p2pkh_address_bytes)
