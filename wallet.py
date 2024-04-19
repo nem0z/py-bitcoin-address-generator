@@ -17,6 +17,12 @@ class Wallet():
         x = vk.pubkey.point.x().to_bytes(32, 'big').hex()
         y = vk.pubkey.point.y().to_bytes(32, 'big').hex()
         return x, y
+    
+    def WIF(self) -> str:
+        extended_key = b'\x80' + self.private_key.to_string()
+        cksum = checksum(extended_key)
+        final_key = extended_key + cksum
+        return base58.b58encode(final_key)
 
     def get_public_key(self) -> str:
         x, y = self.get_xy_as_hex()
